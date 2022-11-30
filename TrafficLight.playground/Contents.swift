@@ -17,34 +17,48 @@ class Alarm{
         blueTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(blueLightCountup), userInfo: nil, repeats: true)
     }
     
+    func yellowStart(){
+        yellowTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(yellowLightCountup), userInfo: nil, repeats: true)
+    }
+    
+    func redStart(){
+        redTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(redLightCountup), userInfo: nil, repeats: true)
+    }
+    
     @objc func blueLightCountup(){
         blueCount += 1
         print("青信号のカウントは\(blueCount)です")
         if blueLimit <= blueCount {
-            print("ジリリリ！（青信号のカウントをストップします）")
+            print("（青信号のカウントをストップします）")
             blueTimer?.invalidate()
+            blueCount = 0
+            yellowStart()
         }
     }
     
     @objc func yellowLightCountup(){
-        count += 1
-        print("青信号のカウントは\(count)です")
-        if limit <= count {
-            print("ジリリリ！（青信号のカウントをストップします）")
-            timer?.invalidate()
+        yellowCount += 1
+        print("黄信号のカウントは\(yellowCount)です")
+        if yellowLimit <= yellowCount {
+            print("（黄信号のカウントをストップします）")
+            yellowTimer?.invalidate()
+            yellowCount = 0
+            redStart()
         }
     }
     
     @objc func redLightCountup(){
-        count += 1
-        print("青信号のカウントは\(count)です")
-        if limit <= count {
-            print("ジリリリ！（青信号のカウントをストップします）")
-            timer?.invalidate()
+        redCount += 1
+        print("赤信号のカウントは\(redCount)です")
+        if redLimit <= redCount {
+            print("（青信号のカウントをストップします）")
+            redTimer?.invalidate()
+            redCount = 0
+            blueStart()
         }
     }
     
 }
 
 let alarm = Alarm()
-alarm.start()
+alarm.blueStart()
