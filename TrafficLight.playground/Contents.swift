@@ -9,24 +9,24 @@ import UIKit
 
 class TrafficLight{
     var blueTimer: Timer?
-    var blueCount: Int = 0
-    var blueLimit: Int = 5
+    var blueCount: Int = 0 //秒
+    var blueLimit: Int = 5 //秒
     
     var yellowTimer: Timer?
-    var yellowCount: Int = 0
-    var yellowLimit: Int = 3
+    var yellowCount: Int = 0 //秒
+    var yellowLimit: Int = 3 //秒
     
     var changeTimer: Timer?
-    var changeCount: Int = 0
-    var changeBlueLight: Int = 2
+    var changeCount: Int = 0 //秒
+    var changeBlueLight: Int = 2 //秒
     
-    var anotherBlueLimit = 10
-    var anotherYellowLimit = 3
+    var anotherBlueLimit = 10 //秒
+    var anotherYellowLimit = 3 //秒
     
     var redTimer: Timer?
-    var redCount: Int = 0
+    var redCount: Int = 0 //秒
     var redLimit: Int{
-        return anotherBlueLimit + anotherYellowLimit + changeBlueLight // 3以上の整数
+        return anotherBlueLimit + anotherYellowLimit + changeBlueLight // \(changeBlueLight)以上の整数
     }
     
     func blueStart(){
@@ -75,7 +75,7 @@ class TrafficLight{
     @objc func changeLightCountUp(){
         changeCount += 1
     print("あと\(changeBlueLight - changeCount)秒で他の信号が青に切り替わる")
-        if changeBlueLight - changeCount <= 1{
+        if changeBlueLight - changeCount <= 0{
             print("(他の信号が青に切り替わる)")
             changeTimer?.invalidate()
             changeCount = 0
