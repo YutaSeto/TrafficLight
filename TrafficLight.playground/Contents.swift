@@ -128,20 +128,30 @@ class TrafficLight{
     }
     
     @objc func redLightCountup(){
+        //夜間だけ押しボタンが押せるフラグを立てる
+        let hour = Calendar.current.component(.hour, from:nowDate)
+        if hour >= 22 || hour <= 3 && isPushButton == false{
+            print("押しボタンの表示を「押してください」を表示")
+        }
+        if redLimit - redCount < 10{
+            print("押しボタンの表示を「お待ちください」に変更")
+        }
+        
         redCount += 1
         print("赤信号は残り\(redLimit - redCount)秒")
         
         if redLimit <= redCount {
-            let hour = Calendar.current.component(.hour, from:nowDate)
-            if hour >= 22 || hour >= 0 || hour <= 3{
+            if hour >= 22 || hour <= 3{
                 print("赤信号の光を止める")
                 redTimer?.invalidate()
                 redCount = 0
+                isPushButton = false
                 nightBlueStart()
             }else{
                 print("(赤信号の光を止める)")
                 redTimer?.invalidate()
                 redCount = 0
+                isPushButton = false
                 blueStart()
             }
         }
@@ -152,6 +162,7 @@ class TrafficLight{
     }
     
     func pushButton(){
+        print("押しボタンの表示を「お待ちください」に変更")
         if redCount != 0 && isPushButton == false && redCount <= redLimit - 10 {
             isPushButton = true
             return redCount = redLimit - 10
