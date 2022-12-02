@@ -98,6 +98,7 @@ class TrafficLight{
             print("(青信号の光を止める)")
             blueTimer?.invalidate()
             blueCount = 0
+            isButtonPush = false
             yellowStart()
         }
     }
@@ -142,6 +143,10 @@ class TrafficLight{
                 blueStart()
             }
         }
+    }
+    
+    func buttonPush(){
+        return isButtonPush = true
     }
     
 }
