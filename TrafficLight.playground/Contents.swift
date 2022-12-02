@@ -41,6 +41,8 @@ class TrafficLight{
         return anotherBlueLimit + anotherYellowLimit + changeBlueLight // \(changeBlueLight)以上の整数
     }
     
+    var isButtonPush: Bool = false
+    
     
     var timer: Timer?
     
@@ -60,7 +62,17 @@ class TrafficLight{
     }
     
     func nightBlueStart(){
-        
+        print("(青信号を光らせる)")
+        if isButtonPush{
+            blueCount += 1
+            print("青信号はあと\(blueLimit - blueCount)秒")
+            if blueLimit <= blueCount {
+                print("(青信号の光を止める)")
+                blueTimer?.invalidate()
+                blueCount = 0
+                yellowStart()
+            }
+        }
     }
     
         
