@@ -41,7 +41,9 @@ class TrafficLight{
         return anotherBlueLimit + anotherYellowLimit + changeBlueLight // \(changeBlueLight)以上の整数
     }
     
-    var isButtonPush: Bool = false
+    var isCarSencer: Bool = false
+    
+    var isPushButton: Bool = false
     
     
     var timer: Timer?
@@ -63,7 +65,7 @@ class TrafficLight{
     
     func nightBlueStart(){
         print("(青信号を光らせる)")
-        if isButtonPush{
+        if isCarSencer{
             blueCount += 1
             print("青信号はあと\(blueLimit - blueCount)秒")
             if blueLimit <= blueCount {
@@ -75,20 +77,20 @@ class TrafficLight{
         }
     }
     
-        
+    
     func yellowStart(){
         yellowTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(yellowLightCountup), userInfo: nil, repeats: true)
         print("(黄色信号を光らせる)")
     }
     
     func redStart(){
-            redTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(redLightCountup), userInfo: nil, repeats: true)
-            print("(赤信号を光らせる)")
+        redTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(redLightCountup), userInfo: nil, repeats: true)
+        print("(赤信号を光らせる)")
     }
     
     func changeLight(){
-            changeTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(changeLightCountUp), userInfo: nil, repeats: true)
-            print("(他の信号を青信号に切り替える)")
+        changeTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(changeLightCountUp), userInfo: nil, repeats: true)
+        print("(他の信号を青信号に切り替える)")
     }
     
     @objc func blueLightCountup(){
@@ -98,7 +100,7 @@ class TrafficLight{
             print("(青信号の光を止める)")
             blueTimer?.invalidate()
             blueCount = 0
-            isButtonPush = false
+            isCarSencer = false
             yellowStart()
         }
     }
@@ -145,8 +147,15 @@ class TrafficLight{
         }
     }
     
-    func buttonPush(){
-        return isButtonPush = true
+    func carSencer(){
+        return isCarSencer = true
+    }
+    
+    func pushButton(){
+        if redCount != 0 && isPushButton == false && redCount <= redLimit - 10 {
+            isPushButton = true
+            return redCount = redLimit - 10
+        }
     }
     
 }
