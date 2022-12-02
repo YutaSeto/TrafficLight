@@ -4,24 +4,28 @@ import UIKit
 //各色でのタイマーを作成
 //光っている時間を決める変数
 //赤信号に切り替わってから数秒後に他の信号を切り替える
+<<<<<<< Updated upstream
 //赤信号の時間の定義ー対の信号の青信号と黄色信号と赤信号に切り替わってからの数秒の合計の時間
+=======
+//対の信号の青と黄色と切り替わるまでの数秒を定義して赤信号から青信号に切り替わる時間の定義
+>>>>>>> Stashed changes
 
 
 class TrafficLight{
     var blueTimer: Timer?
     var blueCount: Int = 0 //秒
-    var blueLimit: Int = 5 //秒
+    let blueLimit: Int = 5 //秒
     
     var yellowTimer: Timer?
     var yellowCount: Int = 0 //秒
-    var yellowLimit: Int = 3 //秒
+    let yellowLimit: Int = 3 //秒
     
     var changeTimer: Timer?
     var changeCount: Int = 0 //秒
-    var changeBlueLight: Int = 2 //秒
+    let changeBlueLight: Int = 2 //秒
     
     var anotherBlueLimit = 10 //秒
-    var anotherYellowLimit = 3 //秒
+    let anotherYellowLimit = 3 //秒
     
     var redTimer: Timer?
     var redCount: Int = 0 //秒
@@ -74,7 +78,7 @@ class TrafficLight{
     
     @objc func changeLightCountUp(){
         changeCount += 1
-    print("あと\(changeBlueLight - changeCount)秒で他の信号が青に切り替わる")
+        print("あと\(changeBlueLight - changeCount)秒で他の信号が青に切り替わる")
         if changeBlueLight - changeCount <= 0{
             print("(他の信号が青に切り替わる)")
             changeTimer?.invalidate()
