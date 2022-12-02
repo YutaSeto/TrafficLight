@@ -4,12 +4,20 @@ import UIKit
 //各色でのタイマーを作成
 //光っている時間を決める変数
 //赤信号に切り替わってから数秒後に他の信号を切り替える
-<<<<<<< Updated upstream
 //赤信号の時間の定義ー対の信号の青信号と黄色信号と赤信号に切り替わってからの数秒の合計の時間
-=======
 //対の信号の青と黄色と切り替わるまでの数秒を定義して赤信号から青信号に切り替わる時間の定義
->>>>>>> Stashed changes
 
+//例外ケース
+//時間によって感応式に切り替わる
+
+//現在時刻の取得
+var nowDate = Date()
+private var dateFormatter: DateFormatter {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm:ss"
+    dateFormatter.locale = Locale(identifier:"ja-JP")
+    return dateFormatter
+}
 
 class TrafficLight{
     var blueTimer: Timer?
@@ -33,11 +41,24 @@ class TrafficLight{
         return anotherBlueLimit + anotherYellowLimit + changeBlueLight // \(changeBlueLight)以上の整数
     }
     
+    
+    var timer: Timer?
+    
+    func timeStart(){
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeCountup), userInfo: nil, repeats: true)
+    }
+    
+    @objc func timeCountup(){
+        nowDate += 1
+        print("現在の時刻は\(dateFormatter.string(from: nowDate))です")
+    }
+    
+    
     func blueStart(){
         blueTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(blueLightCountup), userInfo: nil, repeats: true)
         print("(青信号を光らせる)")
     }
-    
+        
     func yellowStart(){
         yellowTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(yellowLightCountup), userInfo: nil, repeats: true)
         print("(黄色信号を光らせる)")
@@ -101,3 +122,5 @@ class TrafficLight{
 
 let trafficLight = TrafficLight()
 trafficLight.blueStart()
+trafficLight.timeStart()
+
