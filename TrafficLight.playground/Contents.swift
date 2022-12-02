@@ -58,6 +58,11 @@ class TrafficLight{
         blueTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(blueLightCountup), userInfo: nil, repeats: true)
         print("(青信号を光らせる)")
     }
+    
+    func nightBlueStart(){
+        
+    }
+    
         
     func yellowStart(){
         yellowTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(yellowLightCountup), userInfo: nil, repeats: true)
@@ -65,13 +70,13 @@ class TrafficLight{
     }
     
     func redStart(){
-        redTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(redLightCountup), userInfo: nil, repeats: true)
-        print("(赤信号を光らせる)")
+            redTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(redLightCountup), userInfo: nil, repeats: true)
+            print("(赤信号を光らせる)")
     }
     
     func changeLight(){
-        changeTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(changeLightCountUp), userInfo: nil, repeats: true)
-        print("(他の信号を青信号に切り替える)")
+            changeTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(changeLightCountUp), userInfo: nil, repeats: true)
+            print("(他の信号を青信号に切り替える)")
     }
     
     @objc func blueLightCountup(){
@@ -110,11 +115,20 @@ class TrafficLight{
     @objc func redLightCountup(){
         redCount += 1
         print("赤信号は残り\(redLimit - redCount)秒")
+        
         if redLimit <= redCount {
-            print("(赤信号の光を止める)")
-            redTimer?.invalidate()
-            redCount = 0
-            blueStart()
+            let hour = Calendar.current.component(.hour, from:nowDate)
+            if hour >= 22 || hour >= 0 || hour <= 3{
+                print("赤信号の光を止める")
+                redTimer?.invalidate()
+                redCount = 0
+                nightBlueStart()
+            }else{
+                print("(赤信号の光を止める)")
+                redTimer?.invalidate()
+                redCount = 0
+                blueStart()
+            }
         }
     }
     
