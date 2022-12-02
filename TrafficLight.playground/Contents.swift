@@ -4,12 +4,20 @@ import UIKit
 //各色でのタイマーを作成
 //光っている時間を決める変数
 //赤信号に切り替わってから数秒後に他の信号を切り替える
-<<<<<<< Updated upstream
 //赤信号の時間の定義ー対の信号の青信号と黄色信号と赤信号に切り替わってからの数秒の合計の時間
-=======
 //対の信号の青と黄色と切り替わるまでの数秒を定義して赤信号から青信号に切り替わる時間の定義
->>>>>>> Stashed changes
 
+//例外ケース
+//時間によって感応式に切り替わる
+
+//現在時刻の取得
+var nowDate = Date()
+private var dateFormatter: DateFormatter {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm:ss"
+    dateFormatter.locale = Locale(identifier:"ja-JP")
+    return dateFormatter
+}
 
 class TrafficLight{
     var blueTimer: Timer?
@@ -33,10 +41,42 @@ class TrafficLight{
         return anotherBlueLimit + anotherYellowLimit + changeBlueLight // \(changeBlueLight)以上の整数
     }
     
+    var isCarSencer: Bool = false
+    
+    var isPushButton: Bool = false
+    
+    
+    var timer: Timer?
+    
+    func timeStart(){
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeCountup), userInfo: nil, repeats: true)
+    }
+    
+    @objc func timeCountup(){
+        nowDate += 1
+        print("現在の時刻は\(dateFormatter.string(from: nowDate))です")
+    }
+    
+    
     func blueStart(){
         blueTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(blueLightCountup), userInfo: nil, repeats: true)
         print("(青信号を光らせる)")
     }
+    
+    func nightBlueStart(){
+        print("(青信号を光らせる)")
+        if isCarSencer{
+            blueCount += 1
+            print("青信号はあと\(blueLimit - blueCount)秒")
+            if blueLimit <= blueCount {
+                print("(青信号の光を止める)")
+                blueTimer?.invalidate()
+                blueCount = 0
+                yellowStart()
+            }
+        }
+    }
+    
     
     func yellowStart(){
         yellowTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(yellowLightCountup), userInfo: nil, repeats: true)
@@ -60,6 +100,7 @@ class TrafficLight{
             print("(青信号の光を止める)")
             blueTimer?.invalidate()
             blueCount = 0
+            isCarSencer = false
             yellowStart()
         }
     }
@@ -87,13 +128,44 @@ class TrafficLight{
     }
     
     @objc func redLightCountup(){
+        //夜間だけ押しボタンが押せるフラグを立てる
+        let hour = Calendar.current.component(.hour, from:nowDate)
+        if hour >= 22 || hour <= 3 && isPushButton == false{
+            print("押しボタンの表示を「押してください」を表示")
+        }
+        if redLimit - redCount < 10{
+            print("押しボタンの表示を「お待ちください」に変更")
+        }
+        
         redCount += 1
         print("赤信号は残り\(redLimit - redCount)秒")
+        
         if redLimit <= redCount {
-            print("(赤信号の光を止める)")
-            redTimer?.invalidate()
-            redCount = 0
-            blueStart()
+            if hour >= 22 || hour <= 3{
+                print("赤信号の光を止める")
+                redTimer?.invalidate()
+                redCount = 0
+                isPushButton = false
+                nightBlueStart()
+            }else{
+                print("(赤信号の光を止める)")
+                redTimer?.invalidate()
+                redCount = 0
+                isPushButton = false
+                blueStart()
+            }
+        }
+    }
+    
+    func carSencer(){
+        isCarSencer = true
+    }
+    
+    func pushButton(){
+        print("押しボタンの表示を「お待ちください」に変更")
+        if redCount != 0 && isPushButton == false && redCount <= redLimit - 10 {
+            isPushButton = true
+            redCount = redLimit - 10
         }
     }
     
@@ -101,3 +173,5 @@ class TrafficLight{
 
 let trafficLight = TrafficLight()
 trafficLight.blueStart()
+trafficLight.timeStart()
+
