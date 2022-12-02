@@ -158,14 +158,14 @@ class TrafficLight{
     }
     
     func carSencer(){
-        return isCarSencer = true
+        isCarSencer = true
     }
     
     func pushButton(){
         print("押しボタンの表示を「お待ちください」に変更")
         if redCount != 0 && isPushButton == false && redCount <= redLimit - 10 {
             isPushButton = true
-            return redCount = redLimit - 10
+            redCount = redLimit - 10
         }
     }
     
